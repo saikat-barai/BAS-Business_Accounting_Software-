@@ -1,25 +1,58 @@
-<x-guest-layout>
-    <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
-        {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
+@extends('backend.layouts.app')
+
+@section('content')
+<div class="card-body">
+    <p class="login-box-msg">Forgot your password?</p>
+
+    {{-- Info Message --}}
+    <div class="alert alert-info">
+        {{ __('No problem. Just enter your email address below and we will send you a link to reset your password.') }}
     </div>
 
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+    {{-- Session Status (e.g., link sent message) --}}
+    @if (session('status'))
+        <div class="alert alert-success mb-3">
+            {{ session('status') }}
+        </div>
+    @endif
 
+    {{-- Password Reset Form --}}
     <form method="POST" action="{{ route('password.email') }}">
         @csrf
 
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+        {{-- Email Field --}}
+        <div class="input-group mb-3">
+            <input type="email"
+                   name="email"
+                   class="form-control @error('email') is-invalid @enderror"
+                   placeholder="Email"
+                   value="{{ old('email') }}"
+                   required autofocus>
+            <div class="input-group-append">
+                <div class="input-group-text">
+                    <span class="fas fa-envelope"></span>
+                </div>
+            </div>
+            @error('email')
+                <div class="invalid-feedback d-block">
+                    {{ $message }}
+                </div>
+            @enderror
         </div>
 
-        <div class="flex items-center justify-end mt-4">
-            <x-primary-button>
-                {{ __('Email Password Reset Link') }}
-            </x-primary-button>
+        {{-- Submit Button --}}
+        <div class="row">
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary btn-block">
+                    Email Password Reset Link
+                </button>
+            </div>
         </div>
     </form>
-</x-guest-layout>
+
+    {{-- Go back to login --}}
+    <div class="text-center mt-3">
+        <a href="{{ route('login') }}">Back to login</a>
+    </div>
+</div>
+@endsection
