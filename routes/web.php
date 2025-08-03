@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Backend\AccountController;
 use App\Http\Controllers\Backend\AuthController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\BaseController;
@@ -10,11 +11,20 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Route::get('/dashboard', function () {
-//     return view('dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/dashboard', [DashboardController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
+    Route::get('/account', [AccountController::class, 'account'])->name('account');
+    Route::get('/account-list', [AccountController::class, 'accountList'])->name('account.list');
+    Route::post('/account/store', [AccountController::class, 'store'])->name('account.store');
+    Route::delete('/account-delete/{id}', [AccountController::class, 'destroy'])->name('account.destroy');
+    Route::post('/account-by-id', [AccountController::class, 'accountById'])->name('account.by.id');
+    Route::put('/account-update/{id}', [AccountController::class, 'update'])->name('account.update');
+});
+
+
+
+
 
 Route::get('/admin/login', [AuthController::class, 'admin_login'])->name('admin.login');
 Route::get('/admin/register', [AuthController::class, 'admin_register'])->name('admin.register');
@@ -25,4 +35,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
