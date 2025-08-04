@@ -3,9 +3,11 @@
 use App\Http\Controllers\Backend\AccountController;
 use App\Http\Controllers\Backend\AuthController;
 use App\Http\Controllers\Backend\CategoryController;
+use App\Http\Controllers\Backend\ClientController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\BaseController;
 use App\Http\Controllers\ProfileController;
+use App\Models\Client;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -31,6 +33,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/category-by-id', [CategoryController::class, 'categoryById'])->name('category.by.id');
     Route::delete('/category-delete/{id}', [CategoryController::class, 'destroy'])->name('category.destroy');
     Route::post('/category-update', [CategoryController::class, 'update'])->name('category.update');
+
+    // client 
+    Route::get('/client', [ClientController::class, 'client'])->name('client');
+    Route::post('/client/store', [ClientController::class, 'store'])->name('client.store');
+    Route::get('/client-list', [ClientController::class, 'clientList'])->name('client.list');
+    Route::post('/client-by-id', [ClientController::class, 'clientById'])->name('client.by.id');
+    Route::delete('/client-delete/{id}', [ClientController::class, 'destroy'])->name('client.destroy');
+    Route::put('/client-update/{id}', [ClientController::class, 'update'])->name('client.update');
 });
 
 

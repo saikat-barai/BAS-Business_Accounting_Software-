@@ -2,7 +2,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Update Your Account</h4>
+                <h4 class="modal-title">Update Your Client</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -10,39 +10,33 @@
 
             <form id="updateAccountForm" data-id="">
                 @csrf
+                <input type="hidden" name="id" id="updateID">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label>Account Name</label>
-                        <input type="text" class="form-control" name="name" id="updateName"
-                            placeholder="Enter account name" required>
-                        <input type="text" class="form-control d-none" name="id" id="updateID">
+                        <label>Client Name</label>
+                        <input type="text" class="form-control" name="name" id="updateName" placeholder="Enter client name"
+                            required>
                     </div>
-
                     <div class="form-group">
-                        <label>Type</label>
-                        <select name="type" id="updateType" class="form-control" required>
-                            <option value="" selected disabled>Select Type</option>
-                            <option value="bank">Bank</option>
-                            <option value="cash">Cash</option>
-                        </select>
+                        <label>Email</label>
+                        <input type="email" class="form-control" name="email" id="updateEmail" placeholder="Enter client email"
+                            required>
                     </div>
-
                     <div class="form-group">
-                        <label>Account Number</label>
-                        <input type="text" class="form-control" name="account_number" id="updateAccountNumber"
-                            placeholder="Enter account number">
+                        <label>Phone</label>
+                        <input type="text" class="form-control" name="phone" id="updatePhone" placeholder="Enter client phone"
+                            required>
                     </div>
-
                     <div class="form-group">
-                        <label>Opening Balance</label>
-                        <input type="text" class="form-control" name="opening_balance" id="updateOpeningBalance"
-                            placeholder="Enter opening balance">
+                        <label>Address</label>
+                        <input type="text" class="form-control" name="address" id="updateAddress" placeholder="Enter client address"
+                            required>
                     </div>
                 </div>
 
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="updateAccountBtn">Update Account</button>
+                    <button type="button" class="btn btn-primary" id="updateAccountBtn">Update</button>
                 </div>
             </form>
         </div>
@@ -53,14 +47,14 @@
     async function getSingleData(id) {
         $('#updateAccountForm').data('id', id);
         document.getElementById("updateID").value = id;
-        let res = await axios.post('/account-by-id', {
+        let res = await axios.post('/client-by-id', {
             id: id
         })
         let data = res.data.data;
         document.getElementById("updateName").value = data.name;
-        document.getElementById("updateType").value = data.type;
-        document.getElementById("updateAccountNumber").value = data.account_number;
-        document.getElementById("updateOpeningBalance").value = data.opening_balance;
+        document.getElementById("updateEmail").value = data.email;
+        document.getElementById("updatePhone").value = data.phone;
+        document.getElementById("updateAddress").value = data.address;
     }
 </script>
 
@@ -69,11 +63,11 @@
         $('#updateAccountBtn').click(function(e) {
             e.preventDefault();
 
-            let id = $('#updateAccountForm').data('id'); 
+            let id = $('#updateAccountForm').data('id');
             let formData = $('#updateAccountForm').serialize();
 
             $.ajax({
-                url: `/account-update/${id}`,
+                url: `/client-update/${id}`,
                 type: 'PUT',
                 data: formData,
                 success: function(response) {

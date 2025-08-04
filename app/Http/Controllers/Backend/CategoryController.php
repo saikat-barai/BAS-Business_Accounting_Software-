@@ -35,7 +35,7 @@ class CategoryController extends Controller
     public function categoryList()
     {
         try {
-            $categories = Category::select('id', 'name')->orderBy('id', 'desc')->get();
+            $categories = Category::orderBy('created_at', 'desc')->get();
 
             return response()->json([
                 'success' => true,

@@ -62,6 +62,14 @@
                         </p>
                     </a>
                 </li>
+                <li class="nav-item menu-open">
+                    <a href="{{ route('client') }}" class="nav-link {{ Route::is('client') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-th"></i>
+                        <p>
+                            Client
+                        </p>
+                    </a>
+                </li>
                 <li class="nav-item">
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf

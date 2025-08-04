@@ -16,7 +16,7 @@ class AccountController extends Controller
 
     public function accountList()
     {
-        $data = Account::orderBy('id', 'desc')->get();
+        $data = Account::orderBy('created_at', 'desc')->get();
         if ($data->isEmpty()) {
             return response()->json([
                 'status' => 'success',
