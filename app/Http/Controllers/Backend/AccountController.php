@@ -46,7 +46,7 @@ class AccountController extends Controller
             'type' => $request->type,
             'account_number' => $request->account_number,
             'opening_balance' => $request->opening_balance,
-            'current_balance' => $request->opening_balance, // if needed
+            'current_balance' => $request->opening_balance,
         ]);
 
         return response()->json(['message' => 'Account created']);
@@ -102,7 +102,7 @@ class AccountController extends Controller
             'type' => $request->type,
             'account_number' => $request->account_number,
             'opening_balance' => $request->opening_balance,
-            'current_balance' => $request->opening_balance, // optional
+            'current_balance' => $request->opening_balance,
         ]);
 
         return response()->json(['message' => 'Account updated successfully']);

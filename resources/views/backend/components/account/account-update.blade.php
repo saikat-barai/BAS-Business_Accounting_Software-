@@ -15,7 +15,7 @@
                         <label>Account Name</label>
                         <input type="text" class="form-control" name="name" id="updateName"
                             placeholder="Enter account name" required>
-                        <input type="text" class="form-control" name="id" id="updateID">
+                        <input type="text" class="form-control d-none" name="id" id="updateID">
                     </div>
 
                     <div class="form-group">

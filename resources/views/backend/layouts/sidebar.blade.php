@@ -47,6 +47,14 @@
                     </a>
                 </li>
                 <li class="nav-item menu-open">
+                    <a href="{{ route('category') }}" class="nav-link {{ Route::is('category') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-th"></i>
+                        <p>
+                            Category
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item menu-open">
                     <a href="{{ route('account') }}" class="nav-link {{ Route::is('account') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-th"></i>
                         <p>
