@@ -70,6 +70,14 @@
                         </p>
                     </a>
                 </li>
+                <li class="nav-item menu-open">
+                    <a href="{{ route('invoice') }}" class="nav-link {{ Route::is('invoice') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-th"></i>
+                        <p>
+                            Invoice
+                        </p>
+                    </a>
+                </li>
                 <li class="nav-item">
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf

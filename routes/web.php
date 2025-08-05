@@ -5,6 +5,7 @@ use App\Http\Controllers\Backend\AuthController;
 use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Backend\ClientController;
 use App\Http\Controllers\Backend\DashboardController;
+use App\Http\Controllers\Backend\InvoiceController;
 use App\Http\Controllers\BaseController;
 use App\Http\Controllers\ProfileController;
 use App\Models\Client;
@@ -41,6 +42,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/client-by-id', [ClientController::class, 'clientById'])->name('client.by.id');
     Route::delete('/client-delete/{id}', [ClientController::class, 'destroy'])->name('client.destroy');
     Route::put('/client-update/{id}', [ClientController::class, 'update'])->name('client.update');
+
+    // invoice 
+    Route::get('/invoice', [InvoiceController::class, 'invoice'])->name('invoice');
+    Route::post('/invoice/store', [InvoiceController::class, 'store'])->name('invoice.store');
+    Route::get('/invoice-list', [InvoiceController::class, 'invoiceList'])->name('invoice.list');
+    Route::delete('/invoice-delete/{id}', [InvoiceController::class, 'destroy'])->name('invoice.destroy');
 });
 
 
