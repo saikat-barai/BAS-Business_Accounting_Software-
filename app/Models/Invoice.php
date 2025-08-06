@@ -12,6 +12,7 @@ class Invoice extends Model
         'invoice_date',
         'subtotal',
         'tax',
+        'tax_ammount',
         'discount',
         'total',
         'status'
@@ -26,4 +27,8 @@ class Invoice extends Model
     {
         return $this->belongsTo(Client::class);
     }
+
+    // protected $casts = [
+    //     'invoice_date' => 'date',
+    // ];
 }

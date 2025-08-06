@@ -18,6 +18,7 @@ return new class extends Migration
             $table->date('invoice_date');
             $table->decimal('subtotal', 15, 2)->default(0);
             $table->decimal('tax', 15, 2)->default(0);
+            $table->decimal('tax_ammount', 15, 2)->default(0);
             $table->decimal('discount', 15, 2)->default(0);
             $table->decimal('total', 15, 2);
             $table->enum('status', ['unpaid', 'partially_paid', 'paid'])->default('unpaid');

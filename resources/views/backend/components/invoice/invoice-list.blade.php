@@ -33,7 +33,7 @@
                                      <th>Invoice</th>
                                      <th>Client Name</th>
                                      <th>Product/Service</th>
-                                     <th>Total Amount</th>
+                                     <th>Total Amount (<strong>&#2547</strong>)</th>
                                      <th class="text-end">Status</th>
                                      <th class="text-center">Actions</th>
                                  </tr>
@@ -86,8 +86,9 @@
                             <td>${item.total}</td>
                             <td>${getStatusBadge(item.status)}</td>
                             <td class="text-center">
-                                <button data-id="${item.id}" class="btn btn-sm btn-success editBtn" title="View"><i class="fas fa-eye"></i></button>
-                                <button data-id="${item.id}" class="btn btn-sm btn-warning editBtn" title="Edit"><i class="fas fa-edit"></i></button>
+                                <button data-id="${item.id}" class="btn btn-sm btn-primary downloadInvoiceBtn" title="Download"><i class="fas fa-download"></i></button>
+                                <button data-id="${item.id}" class="btn btn-sm btn-success viewInvoiceBtn" title="View"><i class="fas fa-eye"></i></button>
+                                <button data-id="${item.id}" class="btn btn-sm btn-warning editInvoiceBtn" title="Edit"><i class="fas fa-edit"></i></button>
                                 <a href="javascript:void(0)" onclick="confirmDelete(${item.id})" class="btn btn-sm btn-danger" title="Delete">
                                  <i class="fas fa-trash-alt"></i>
                                 </a>
@@ -95,13 +96,6 @@
                             </tr>`
              tableList.append(row);
          })
-
-         $(".editBtn").on("click", async function() {
-             let id = $(this).data("id");
-             //   await getSingleData(id);
-             //   $("#update-modal").modal("show");
-         })
-
 
          let table = new DataTable('#tableData', {
              order: [
@@ -129,6 +123,13 @@
      }
  </script>
 
+ {{-- script for download invoice --}}
+ <script>
+     $(document).on('click', '.downloadInvoiceBtn', function() {
+         let invoiceId = $(this).data('id');
+         window.open(`/invoice-download/${invoiceId}`, '_blank');
+     });
+ </script>
 
  <script>
      function confirmDelete(id) {

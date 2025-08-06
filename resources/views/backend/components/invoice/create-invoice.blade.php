@@ -23,7 +23,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Invoice Number</label>
-                                <input type="text" name="invoice_number" class="form-control"
+                                <input type="text" name="invoice_number" class="form-control" id="invoiceNumber"
                                     value="{{ 'INV-' . time() }}" required>
                             </div>
                         </div>

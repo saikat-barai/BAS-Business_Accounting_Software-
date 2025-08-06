@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class InvoiceController extends Controller
 {
@@ -76,7 +77,8 @@ class InvoiceController extends Controller
                 'invoice_number' => $validated['invoice_number'],
                 'invoice_date'   => $validated['invoice_date'],
                 'subtotal'       => $calculatedSubtotal,
-                'tax'            => $taxAmount,
+                'tax'            => $taxPercentage,
+                'tax_ammount'            => $taxAmount,
                 'discount'       => $discount,
                 'total'          => $total,
                 'status'         => 'unpaid',
@@ -142,5 +144,113 @@ class InvoiceController extends Controller
                 'error'   => $e->getMessage(),
             ], 500);
         }
+    }
+
+    public function show($id)
+    {
+        if (!is_numeric($id)) {
+            return response()->json(['message' => 'Invalid invoice ID.'], 400);
+        }
+
+        $invoice = Invoice::with('client', 'items')->find($id);
+
+        if (!$invoice) {
+            return response()->json(['message' => 'Invoice not found.'], 404);
+        }
+
+        return response()->json($invoice);
+    }
+
+
+    public function update(Request $request)
+    {
+        // Step 1: Validate input
+        $validator = Validator::make($request->all(), [
+            'id'             => 'required|exists:invoices,id',
+            'client_id'      => 'required|exists:clients,id',
+            'invoice_number' => 'required|unique:invoices,invoice_number,' . $request->id,
+            'invoice_date'   => 'required|date',
+            'description'    => 'required|string|max:255',
+            'unit_price'     => 'required|numeric|min:0',
+            'quantity'       => 'required|numeric|min:1',
+            'subtotal'       => 'required|numeric|min:0',
+            'tax'            => 'required|numeric|min:0',
+            'discount'       => 'required|numeric|min:0',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        try {
+            DB::beginTransaction();
+
+            $validated = $validator->validated();
+
+            // Recalculate amounts
+            $calculatedSubtotal = $validated['unit_price'] * $validated['quantity'];
+            $taxPercentage = $validated['tax'];
+            $discount = $validated['discount'];
+            $taxAmount = ($calculatedSubtotal * $taxPercentage) / 100;
+            $total = ($calculatedSubtotal + $taxAmount) - $discount;
+
+            // Step 2: Update invoice
+            $invoice = Invoice::findOrFail($validated['id']);
+            $invoice->update([
+                'client_id'    => $validated['client_id'],
+                'invoice_number' => $validated['invoice_number'],
+                'invoice_date' => $validated['invoice_date'],
+                'subtotal'     => $calculatedSubtotal,
+                'tax'          => $taxPercentage,
+                'tax_ammount'  => $taxAmount,
+                'discount'     => $discount,
+                'total'        => $total,
+            ]);
+
+            // Step 3: Update invoice item (assumes one item per invoice)
+            $invoiceItem = $invoice->items()->first();
+            if ($invoiceItem) {
+                $invoiceItem->update([
+                    'description' => $validated['description'],
+                    'quantity'    => $validated['quantity'],
+                    'unit_price'  => $validated['unit_price'],
+                    'total'       => $calculatedSubtotal,
+                ]);
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'status'  => true,
+                'message' => 'Invoice updated successfully.',
+                'data'    => $invoice->load('items'),
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'status'  => false,
+                'message' => 'Invoice update failed.',
+                'error'   => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function invoiceview()
+    {
+        return view('backend.components.invoice.invoice');
+    }
+
+    public function download($id)
+    {
+        $invoice = Invoice::with('client', 'items')->findOrFail($id);
+
+        $pdf = Pdf::loadView('backend.components.invoice.invoice', compact('invoice')); // View must exist
+        $fileName = 'Invoice-' . $invoice->invoice_number . '.pdf';
+
+        return $pdf->download($fileName);
     }
 }

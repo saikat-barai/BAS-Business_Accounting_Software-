@@ -48,6 +48,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/invoice/store', [InvoiceController::class, 'store'])->name('invoice.store');
     Route::get('/invoice-list', [InvoiceController::class, 'invoiceList'])->name('invoice.list');
     Route::delete('/invoice-delete/{id}', [InvoiceController::class, 'destroy'])->name('invoice.destroy');
+    Route::get('/invoiceview', [InvoiceController::class, 'invoiceview'])->name('invoiceview');
+    Route::get('/invoice/{id}', [InvoiceController::class, 'show'])->name('invoice.show');
+    Route::post('/invoice-update', [InvoiceController::class, 'update'])->name('invoice.update');
+    Route::get('/invoice-download/{id}', [InvoiceController::class, 'download'])->name('invoice.download');
+
 });
 
 
