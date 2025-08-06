@@ -15,7 +15,8 @@ class Invoice extends Model
         'tax_ammount',
         'discount',
         'total',
-        'status'
+        'status',
+        'paid_amount'
     ];
 
     public function items()

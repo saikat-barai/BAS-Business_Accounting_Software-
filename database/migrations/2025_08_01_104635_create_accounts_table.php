@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('accounts', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name')->unique();
             $table->enum('type', ['bank', 'cash']);
             $table->string('account_number')->nullable();
             $table->decimal('opening_balance', 15, 2)->default(0);

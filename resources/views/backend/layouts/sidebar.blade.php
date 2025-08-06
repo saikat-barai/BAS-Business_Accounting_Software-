@@ -78,6 +78,14 @@
                         </p>
                     </a>
                 </li>
+                <li class="nav-item menu-open">
+                    <a href="{{ route('payment') }}" class="nav-link {{ Route::is('payment') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-th"></i>
+                        <p>
+                            Payment
+                        </p>
+                    </a>
+                </li>
                 <li class="nav-item">
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf

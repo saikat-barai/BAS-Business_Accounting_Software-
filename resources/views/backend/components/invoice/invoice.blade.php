@@ -25,7 +25,7 @@
                     </p>
                 </td>
                 <td align="right">
-                    <h3 style="margin: 0; color: #2c3e50;">{{ $companyName ?? 'Your Company' }}</h3>
+                    <h3 style="margin: 0; color: #2c3e50;">{{ $companyName ?? 'IMBD Agency' }}</h3>
                     <p style="margin: 4px 0; font-size: 14px;">{{ $companyEmail ?? 'info@company.com' }}</p>
                     <p style="margin: 2px 0; font-size: 14px;">{{ $companyAddress ?? '123 Business Street' }}</p>
                 </td>
