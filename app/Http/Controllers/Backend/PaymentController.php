@@ -36,7 +36,7 @@ class PaymentController extends Controller
 
     public function store(Request $request)
     {
-        // Step 1: Validate the input
+        // Validate the input
         $validator = Validator::make($request->all(), [
             'invoice_id' => 'required|exists:invoices,id',
             'account_id' => 'required|exists:accounts,id',
@@ -53,14 +53,14 @@ class PaymentController extends Controller
         }
 
         try {
-            // Step 2: Retrieve necessary models
+            //  Retrieve necessary models
             $invoice = Invoice::findOrFail($request->invoice_id);
             $account = Account::findOrFail($request->account_id);
             $amount  = round($request->amount, 2); // Precision fix
 
             $due = round($invoice->total - $invoice->paid_amount, 2);
 
-            // Step 3: Check if invoice is already fully paid
+            //  Check if invoice is already fully paid
             if ($due <= 0) {
                 return response()->json([
                     'status'  => false,
@@ -68,7 +68,7 @@ class PaymentController extends Controller
                 ], 400);
             }
 
-            // Step 4: Prevent overpayment
+            //  Prevent overpayment
             if ($amount > $due) {
                 return response()->json([
                     'status'  => false,
@@ -76,7 +76,7 @@ class PaymentController extends Controller
                 ], 400);
             }
 
-            // Step 5: Create payment record
+            //  Create payment record
             $payment = Payment::create([
                 'invoice_id' => $invoice->id,
                 'account_id' => $account->id,
@@ -85,10 +85,10 @@ class PaymentController extends Controller
                 'notes'      => $request->notes,
             ]);
 
-            // Step 6: Update account balance
+            //  Update account balance
             $account->increment('current_balance', $amount);
 
-            // Step 7: Update invoice payment status
+            //  Update invoice payment status
             $invoice->paid_amount += $amount;
             $invoice->status = match (true) {
                 $invoice->paid_amount >= $invoice->total => 'paid',

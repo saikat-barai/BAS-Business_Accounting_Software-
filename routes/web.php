@@ -5,6 +5,7 @@ use App\Http\Controllers\Backend\AuthController;
 use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Backend\ClientController;
 use App\Http\Controllers\Backend\DashboardController;
+use App\Http\Controllers\Backend\ExpensesController;
 use App\Http\Controllers\Backend\InvoiceController;
 use App\Http\Controllers\Backend\PaymentController;
 use App\Http\Controllers\BaseController;
@@ -59,6 +60,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/payment-list', [PaymentController::class, 'paymentList'])->name('payment.list');
     Route::post('/payment/store', [PaymentController::class, 'store'])->name('payment.store');
     Route::delete('/payment-delete/{id}', [PaymentController::class, 'destroy'])->name('payment.destroy');
+
+    // expense 
+    Route::get('/expense', [ExpensesController::class, 'expense'])->name('expense'); 
+    Route::post('/expense/store', [ExpensesController::class, 'store'])->name('expense.store');
+    Route::get('/expense-list', [ExpensesController::class, 'expenseList'])->name('expense.list');
+    Route::get('/expense/{id}', [ExpensesController::class, 'show']);
+    Route::post('/expense-update/{id}', [ExpensesController::class, 'update']);
 
 });
 
